@@ -35,12 +35,13 @@ export class BookSeat implements Executable<Request, Response> {
     }
     
     //Vérifier le nombre de participants restants
+    const participations = await this.participationRepository.findByWebinarId(webinarId);
     if (participations.length >= webinar.props.seats) {
       throw new NoSeatsAvailableException();
     }
 
-    const participation = new Participation({ userId: user.props.id, webinarId });
-    await this.participationRepository.save(participation);
+    const newParticipation = new Participation({ userId: user.props.id, webinarId });
+    await this.participationRepository.save(newParticipation);
 
     //Envoyer un email à l'organisateur pour mentionner qu'un nouveau participant s'est inscrit
     const email: Email = {
