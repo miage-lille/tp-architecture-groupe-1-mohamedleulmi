@@ -67,4 +67,10 @@ describe('Feature: Book a seat', () => {
     expect(mailer.sentEmails[0].subject).toBe('New participant registered');
     expect(mailer.sentEmails[0].body).toContain('alice@example.com');
   });
+
+  it('should throw an error if the webinar is not found', async () => {
+    await expect(useCase.execute({ webinarId: 'non-existent-webinar', user })).rejects.toThrow(
+      'Webinar not found',
+    );
+  });
 });
